@@ -22,6 +22,10 @@ defmodule OtpMapserver do
     GenServer.cast(@name, {:delete, key})
   end
 
+  def clear() do
+    GenServer.cast(@name, :clear)
+  end
+
 
 
   ##Server API
@@ -39,13 +43,13 @@ defmodule OtpMapserver do
     {:noreply, deleted}
   end
 
-
+  def handle_cast(:clear, _state) do
+    {:noreply, @initial_state}
+  end
 
   ##Server callbacks
   def init(:ok) do
     {:ok, @initial_state}
   end
-
-  ##Helper function
 
 end
