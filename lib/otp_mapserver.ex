@@ -18,6 +18,12 @@ defmodule OtpMapserver do
     GenServer.call(@name, {:write, key, value})
   end
 
+  def delete(key) do
+    GenServer.cast(@name, {:delete, key})
+  end
+
+
+
   ##Server API
   def handle_call({:read, key}, _from, state) do
     {:reply, state[key], state}
@@ -27,6 +33,13 @@ defmodule OtpMapserver do
     updated = Map.put(state, key, value)
     {:reply, :ok, updated}
   end
+
+  def handle_cast({:delete, key}, state) do
+    deleted = Map.delete(state, key)
+    {:noreply, deleted}
+  end
+
+
 
   ##Server callbacks
   def init(:ok) do
