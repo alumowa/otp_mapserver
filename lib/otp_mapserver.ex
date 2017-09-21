@@ -10,6 +10,10 @@ defmodule OtpMapserver do
     GenServer.start_link(__MODULE__, :ok, opts ++ [name: OTPMS])
   end
 
+  def stop do
+    GenServer.cast(@name, :stop)
+  end
+
   def read(key) do
     GenServer.call(@name, {:read, key})
   end
@@ -55,9 +59,18 @@ defmodule OtpMapserver do
     {:noreply, @initial_state}
   end
 
+  def handle_cast(:stop, state) do
+    {:stop, :normal, state}
+  end
+
   ##Server callbacks
   def init(:ok) do
     {:ok, @initial_state}
+  end
+
+  def terminate(reason, _state) do
+    IO.puts("server terminated because of #{reason}")
+    :ok
   end
 
 end
