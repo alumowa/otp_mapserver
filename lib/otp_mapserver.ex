@@ -26,6 +26,10 @@ defmodule OtpMapserver do
     GenServer.cast(@name, :clear)
   end
 
+  def exist(key) do
+    GenServer.call(@name, {:exist, key})
+  end
+
 
 
   ##Server API
@@ -36,6 +40,10 @@ defmodule OtpMapserver do
   def handle_call({:write, key, value}, _from, state) do
     updated = Map.put(state, key, value)
     {:reply, :ok, updated}
+  end
+
+  def handle_call({:exist, key}, _from, state) do
+    {:reply, Map.has_key?(state, key), state}
   end
 
   def handle_cast({:delete, key}, state) do
